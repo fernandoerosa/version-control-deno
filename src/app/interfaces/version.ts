@@ -3,4 +3,5 @@ export interface Version {
     appVersionNumber: string;
     appVersionCode: number;
     appPackageName: string;
+    AppAssetId: number;
 }
