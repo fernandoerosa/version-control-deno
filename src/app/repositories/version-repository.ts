@@ -1,4 +1,5 @@
 import Version from "../models/version.ts";
+import { send } from "https://deno.land/x/oak@14.2.0/mod.ts";
 import { FilesystemService } from "../services/filesystem.service.ts";
 
 const getAllVersions = async ({ response }: { response: any }) => {
@@ -7,13 +8,14 @@ const getAllVersions = async ({ response }: { response: any }) => {
     response.body = versions;
 }
 
-const getVersion = async ({ params, response }: { params: any ,response: any }) => {
-    const appId = await params.appId;
+const getVersion = async (ctx: any) => {
+    const appId = await ctx.params.appId;
+    console.log(appId)
     const version = await Version.findOne({ appId: appId, isEnable: true });
-    response.status = 201;
-    response.body = version;
+    await send(ctx, "client-11-v-1.12-6-16", { root: "./public" });
+    ctx.response.status = 201;
+    ctx.response.body = version;
 }
-
 
 const addVersion = async ({
     request,
@@ -22,9 +24,9 @@ const addVersion = async ({
     request: any;
     response: any;
 }) => {
-    try { 
+    try {
         const body = await request.body.formData();
-        console.log(body);    
+        console.log(body);
 
         const version = new Version({
             appName: body.get("appName"),

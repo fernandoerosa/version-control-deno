@@ -5,6 +5,6 @@ const router = new Router();
 
 router.post("/api/version", addVersion);
 router.get("/api/versions", getAllVersions);
-router.get("/api/version/:appId", getVersion);
+router.get("/api/version/:appId", (ctx) => getVersion(ctx));
 
 export default router;
