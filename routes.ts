@@ -1,9 +1,10 @@
 import { Router } from "https://deno.land/x/oak@14.2.0/mod.ts";
-import { addVersion, getAllVersions } from "./src/app/repositories/version-repository.ts";
+import { addVersion, getAllVersions, getVersion } from "./src/app/repositories/version-repository.ts";
 
 const router = new Router();
 
 router.post("/api/version", addVersion);
-router.get("/api/version", getAllVersions);
+router.get("/api/versions", getAllVersions);
+router.get("/api/version/:appId", getVersion);
 
 export default router;

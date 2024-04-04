@@ -8,6 +8,7 @@ const versionSchema = new Schema({
       appAssetId: {type: Number, required: true},
       isEnable: {type: Boolean, required: true},
       clientId: {type: Number, required: true},
+      appId: {type: Number, required: true},
     }, 
     {
       timestamps: true
