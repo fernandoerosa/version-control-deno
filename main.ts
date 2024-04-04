@@ -8,7 +8,12 @@ const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-await mongoose.connect("mongodb://localhost:27017/users");
+try {
+  await mongoose.connect("mongodb://localhost:27017/users");
+} catch (e) {
+  console.log(e.message)
+}
+
 
 console.log(`Server listening on port ${PORT}`);
 await app.listen({ port: PORT });

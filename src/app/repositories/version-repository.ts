@@ -1,19 +1,10 @@
-import { config } from "https://deno.land/x/dotenv/mod.ts";
 import Version from "../models/version.ts";
-const { DATA_API_KEY, APP_ID } = config();
-const BASE_URI = `https://sa-east-1.aws.data.mongodb-api.com/app/${APP_ID}/endpoint/data/v1/action`;
-const DATA_SOURCE = "Cluster0";
-const DATABASE = "mult-build";
-const COLLECTION = "mult-build";
 
-const options = {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "api-key": DATA_API_KEY
-  },
-  body: ""
-};
+const getAllVersions = async ({response} : {response: any}) => {
+  const versions = await Version.find();
+  response.status = 201;
+  response.body = versions;
+}
 
 const addVersion = async ({
   request,
@@ -22,20 +13,43 @@ const addVersion = async ({
   request: any;
   response: any;
 }) => {
+  try {
     const body = await request.body.json();
     const version = new Version(body);
 
+    const currentVersion = await Version.findOne({ clientId: version.clientId, isEnable: true });
+
+    if (currentVersion != null) {
+      await updateCurrentVersion(currentVersion!._id.toString());
+    }
+
     await version.save();
 
-    console.log(await Version.findById(version._id));
+    console.log("New Version" + await Version.findById(version._id));
 
     response.status = 201;
     response.body = {
       success: true,
       data: version,
-      // insertedId
     };
-
+  } catch (e) {
+    response.status = 400;
+    response.body = {
+      error: e.message
+    }
+  }
 };
 
-export { addVersion };
+const updateCurrentVersion = async (_id: string) => {
+  try {
+    const update = { isEnable: false };
+
+    await Version.findByIdAndUpdate({_id: _id}, update);
+
+    console.log("VersionUpdated => " + await Version.findById(_id));
+  } catch (e) {
+    throw e;
+  }
+}
+
+export { addVersion, getAllVersions };
