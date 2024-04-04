@@ -5,10 +5,12 @@ import router from "./routes.ts";
 const PORT = 3000;
 const ROOT_DIR = "./public";
 const ROOT_DIR_PATH = "/public";
+
 const app = new Application();
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
 app.use(async (ctx, next) => {
     if (!ctx.request.url.pathname.startsWith(ROOT_DIR_PATH)) {
         next();
