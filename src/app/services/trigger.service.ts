@@ -9,9 +9,8 @@ export class TriggerService {
     const fileContent = await Deno.readFile(`./public/${version.assetName}`);
     const blob = new Blob([fileContent]);
 
-    formData.append('appId', version.appId);
     formData.append('version', "v" + version.appVersionNumber + "-" + version.appVersionCode);
-    formData.append('appAssets', blob);
+    formData.append('appAssets.zip', blob);
 
     const headers = {
       'Authorization': `Basic ${RELEASE_VERSION_TRIGGER_TOKEN}`,
