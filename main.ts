@@ -12,20 +12,20 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.use(async (ctx, next) => {
-    if (!ctx.request.url.pathname.startsWith(ROOT_DIR_PATH)) {
-        next();
-        return;
-    }
-    const filePath = ctx.request.url.pathname.replace(ROOT_DIR_PATH, "");
-    await send(ctx, filePath, {
-        root: ROOT_DIR,
-    });
+  if (!ctx.request.url.pathname.startsWith(ROOT_DIR_PATH)) {
+    next();
+    return;
+  }
+  const filePath = ctx.request.url.pathname.replace(ROOT_DIR_PATH, "");
+  await send(ctx, filePath, {
+    root: ROOT_DIR,
+  });
 });
 
 try {
-    await mongoose.connect("mongodb://localhost:27017/users");
+  await mongoose.connect("mongodb://localhost:27017/users");
 } catch (e) {
-    console.log(e.message)
+  console.log(e.message)
 }
 
 
