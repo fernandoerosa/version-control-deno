@@ -2,7 +2,7 @@ import { compress } from "https://deno.land/x/zip@v1.2.5/mod.ts";
 
 export class FilesystemService {
 
-    static async createAssets(version: any, _assets: FormData) {
+    static async createAssets(version: any, formaData: FormData) {
         const fileName = `client-${version.clientId}-v-${version.appVersionNumber}-${version.appVersionCode}`;
         const root = "./public/";
         const directory = root + fileName;
@@ -14,7 +14,7 @@ export class FilesystemService {
             console.log(e.message)
         }
 
-        const iconFile: File = _assets!.get("appIcon") as File;
+        const iconFile: File = formaData!.get("appIcon") as File;
         const iconArrayBuffer: ArrayBuffer = await iconFile.arrayBuffer();
 
         await Deno.writeFile(directory + "/" + iconFile.name, new Uint8Array(iconArrayBuffer));

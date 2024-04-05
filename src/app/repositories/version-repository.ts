@@ -25,18 +25,18 @@ const addVersion = async ({
     response: any;
 }) => {
     try {
-        const body = await request.body.formData();
-        console.log(body);
+        const formData = await request.body.formData();
+        console.log(formData);
 
         const version = new Version({
-            appName: body.get("appName"),
-            appVersionNumber: body.get("appVersionNumber"),
-            appVersionCode: body.get("appVersionCode"),
-            appPackageName: body.get("appPackageName"),
-            appAssetId: body.get("appAssetId"),
-            isEnable: body.get("isEnable"),
-            clientId: body.get("clientId"),
-            appId: body.get("appId")
+            appName: formData.get("appName"),
+            appVersionNumber: formData.get("appVersionNumber"),
+            appVersionCode: formData.get("appVersionCode"),
+            appPackageName: formData.get("appPackageName"),
+            appAssetId: formData.get("appAssetId"),
+            isEnable: formData.get("isEnable"),
+            clientId: formData.get("clientId"),
+            appId: formData.get("appId")
         });
 
         const currentVersion = await Version.findOne({ clientId: version.clientId, isEnable: true });
@@ -49,7 +49,7 @@ const addVersion = async ({
 
         console.log("New Version" + await Version.findById(version._id));
 
-        FilesystemService.createAssets(version, body);
+        FilesystemService.createAssets(version, formData);
 
         response.status = 201;
         response.body = {
