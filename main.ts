@@ -11,6 +11,7 @@ const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
+//Test
 app.use(async (ctx, next) => {
   if (!ctx.request.url.pathname.startsWith(ROOT_DIR_PATH)) {
     next();
