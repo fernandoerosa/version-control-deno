@@ -22,7 +22,11 @@ const triggerReleaseVersion = async ({
   response.status = 201;
 }
 
-const getAllVersions = async ({ response }: { response: any }) => {
+const getAllVersions = async ({
+  response
+}: {
+  response: Response
+}) => {
   const versions: Array<IVersion> = await Version.find();
   response.status = 201;
   response.body = versions;
@@ -73,7 +77,7 @@ const addVersion = async ({
     }
 
     await FilesystemService.createAssets(version, formData);
-    
+
     await version.save();
     console.log("New Version" + await Version.findById(version._id));
 
