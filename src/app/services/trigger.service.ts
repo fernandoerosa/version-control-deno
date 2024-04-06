@@ -1,10 +1,11 @@
 import { config } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
+import { IVersion } from "../models/version.ts";
 
 const { RELEASE_VERSION_TRIGGER_URL, RELEASE_VERSION_TRIGGER_TOKEN } = config();
 
 export class TriggerService {
 
-  static async triggerRelease(version: any) {  
+  static async triggerRelease(version: IVersion) {  
     const formData = new FormData();
     const fileContent = await Deno.readFile(`./public/${version.assetName}`);
     const blob = new Blob([fileContent]);

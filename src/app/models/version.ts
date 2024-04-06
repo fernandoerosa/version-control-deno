@@ -16,4 +16,17 @@ const versionSchema = new Schema({
     }
 );
 
+export interface IVersion {
+  _id: string,
+  appName: string,
+  appVersionNumber: string,
+  appVersionCode: number,
+  appPackageName: string,
+  appAssetId: number,
+  assetName: string,
+  isEnable: boolean,
+  clientId: number,
+  appId: number,
+}
+
 export default model("Version", versionSchema);

@@ -1,36 +1,44 @@
 import Version from "../models/version.ts";
+import { IVersion } from "../models/version.ts";
 import { FilesystemService } from "../services/filesystem.service.ts";
 import { TriggerService } from "../services/trigger.service.ts";
+import { Request, Response } from "https://deno.land/x/oak@14.2.0/mod.ts";
 
 const triggerReleaseVersion = async ({
   request,
   response
 }: {
-  request: any,
-  response: any
+  request: Request,
+  response: Response
 }) => {
-  const formData = await request.body.formData();
+  const formData: FormData = await request.body.formData();
   console.log(formData);
 
-  const version = await Version.findOne({ appId: formData.get("appId"), isEnable: true });
+  const version: IVersion = await Version.findOne({ appId: formData.get("appId"), isEnable: true }) as IVersion;
 
   console.log(version);
 
-  TriggerService.triggerRelease(version);
+  await TriggerService.triggerRelease(version);
   response.status = 201;
 }
 
 const getAllVersions = async ({ response }: { response: any }) => {
-  const versions = await Version.find();
+  const versions: Array<IVersion> = await Version.find();
   response.status = 201;
   response.body = versions;
 }
 
-const getVersion = async ({ params, response }: { params: any, response: any }) => {
-  const appId = await params.appId;
+const getVersion = async ({
+  params,
+  response
+}: {
+  params: any,
+  response: Response
+}) => {
+  const appId: number = await params.appId;
   console.log(appId)
 
-  const version = await Version.findOne({ appId: appId, isEnable: true });
+  const version: IVersion = await Version.findOne({ appId: appId, isEnable: true }) as IVersion;
 
   response.status = 201;
   response.body = version;
@@ -40,11 +48,11 @@ const addVersion = async ({
   request,
   response,
 }: {
-  request: any;
-  response: any;
+  request: Request,
+  response: Response
 }) => {
   try {
-    const formData = await request.body.formData();
+    const formData: FormData = await request.body.formData();
     console.log(formData);
 
     const version = new Version({
@@ -58,15 +66,16 @@ const addVersion = async ({
       appId: formData.get("appId"),
     });
 
-    const currentVersion = await Version.findOne({ clientId: version.clientId, isEnable: true });
+    const currentVersion: IVersion = await Version.findOne({ clientId: version.clientId, isEnable: true }) as IVersion;
 
     if (currentVersion != null) {
-      await updateCurrentVersion(currentVersion!._id.toString());
+      await _updateCurrentVersion(currentVersion!._id.toString());
     }
 
+    await FilesystemService.createAssets(version, formData);
+    
+    await version.save();
     console.log("New Version" + await Version.findById(version._id));
-
-    FilesystemService.createAssets(version, formData);
 
     response.status = 201;
     response.body = {
@@ -81,7 +90,7 @@ const addVersion = async ({
   }
 };
 
-const updateCurrentVersion = async (_id: string) => {
+const _updateCurrentVersion = async (_id: string) => {
   try {
     const update = { isEnable: false };
     const filter = { _id: _id };

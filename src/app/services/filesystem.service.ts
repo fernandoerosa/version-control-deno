@@ -27,6 +27,5 @@ export class FilesystemService {
     });
 
     version.assetName = fileName + ".zip";
-    await version.save();
   }
 }
