@@ -1,9 +1,13 @@
 import { compress } from "https://deno.land/x/zip@v1.2.5/mod.ts";
+import Asset from "../models/asset.ts";
 
 export class FilesystemService {
 
-  static async createAssets(version: any, formaData: FormData) {
-    const fileName = `client-${version.clientId}-app-${version.appId}-v-${version.appVersionNumber}-${version.appVersionCode}`;
+  static async createAssets(version: any, formData: FormData): Promise<string> {
+    const assetData = JSON.parse(JSON.stringify(Object.fromEntries(formData)));
+    const asset = new Asset(assetData);
+
+    const fileName = `app-${version.appId}-v-${version.appVersionNumber}-${version.appVersionCode}`;
     const root = "./public/";
     const directory = root + fileName;
     console.log(directory)
@@ -14,7 +18,7 @@ export class FilesystemService {
       console.log(e.message)
     }
 
-    const iconFile: File = formaData!.get("appIcon") as File;
+    const iconFile: File = formData!.get("appIcon") as File;
     const iconArrayBuffer: ArrayBuffer = await iconFile.arrayBuffer();
 
     await Deno.writeFile(directory + "/" + iconFile.name, new Uint8Array(iconArrayBuffer));
@@ -26,6 +30,8 @@ export class FilesystemService {
       Deno.remove(directory, { recursive: true });
     });
 
-    version.assetName = fileName + ".zip";
+    asset.assetPath = directory + ".zip";
+    asset.save();
+    return asset._id.toString();
   }
 }

@@ -1,13 +1,14 @@
 import { config } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
 import { IVersion } from "../models/version.ts";
+import { IAsset } from "../models/asset.ts";
 
 const { RELEASE_VERSION_TRIGGER_URL, RELEASE_VERSION_TRIGGER_TOKEN } = config();
 
 export class TriggerService {
 
-  static async triggerRelease(version: IVersion) {  
+  static async triggerRelease(version: IVersion, asset: IAsset) {  
     const formData = new FormData();
-    const fileContent = await Deno.readFile(`./public/${version.assetName}`);
+    const fileContent = await Deno.readFile(asset.assetPath);
     const blob = new Blob([fileContent]);
 
     formData.append('version', "v" + version.appVersionNumber + "-" + version.appVersionCode);

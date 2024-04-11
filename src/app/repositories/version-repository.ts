@@ -1,4 +1,6 @@
+import { IAsset } from "../models/asset.ts";
 import Version from "../models/version.ts";
+import Asset from "../models/asset.ts";
 import { IVersion } from "../models/version.ts";
 import { FilesystemService } from "../services/filesystem.service.ts";
 import { TriggerService } from "../services/trigger.service.ts";
@@ -13,10 +15,12 @@ const triggerReleaseVersion = async ({
 }) => {
   const formData: FormData = await request.body.formData();
   const version: IVersion = await Version.findOne({ appId: formData.get("appId"), isEnable: true }) as IVersion;
+  const asset: IAsset = await Asset.findById(version.appAssetId) as IAsset;
 
   console.log(version);
+  console.log(asset);
 
-  await TriggerService.triggerRelease(version);
+  await TriggerService.triggerRelease(version, asset);
   response.status = 201;
 }
 
@@ -59,13 +63,13 @@ const addVersion = async ({
 
     const version = new Version(versionData);
 
-    const currentVersion: IVersion = await Version.findOne({ clientId: version.clientId, isEnable: true }) as IVersion;
+    const currentVersion: IVersion = await Version.findOne({ clientId: version.appId, isEnable: true }) as IVersion;
 
     if (currentVersion != null) {
       await _updateCurrentVersion(currentVersion!._id.toString());
     }
 
-    await FilesystemService.createAssets(version, formData);
+    version.appAssetId = await FilesystemService.createAssets(version, formData);
 
     await version.save();
     console.log("New Version" + await Version.findById(version._id));
