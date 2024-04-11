@@ -12,8 +12,6 @@ const triggerReleaseVersion = async ({
   response: Response
 }) => {
   const formData: FormData = await request.body.formData();
-  console.log(formData);
-
   const version: IVersion = await Version.findOne({ appId: formData.get("appId"), isEnable: true }) as IVersion;
 
   console.log(version);
@@ -57,18 +55,9 @@ const addVersion = async ({
 }) => {
   try {
     const formData: FormData = await request.body.formData();
-    console.log(formData);
+    const versionData = JSON.parse(JSON.stringify(Object.fromEntries(formData)));
 
-    const version = new Version({
-      appName: formData.get("appName"),
-      appVersionNumber: formData.get("appVersionNumber"),
-      appVersionCode: formData.get("appVersionCode"),
-      appPackageName: formData.get("appPackageName"),
-      appAssetId: formData.get("appAssetId"),
-      isEnable: formData.get("isEnable"),
-      clientId: formData.get("clientId"),
-      appId: formData.get("appId"),
-    });
+    const version = new Version(versionData);
 
     const currentVersion: IVersion = await Version.findOne({ clientId: version.clientId, isEnable: true }) as IVersion;
 
