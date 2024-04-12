@@ -1,0 +1,25 @@
+{
+    "clientData":
+    [
+        {
+            "id": "1",
+            "backEndUrl": "www.backend.com",
+            "apiUrl": "www.api.com",
+            "userId": 99,
+            "clientId": 99
+        }
+    ],
+    "appAssets":
+    [
+    	{
+    		"appName":"app",
+    		"appIcon":"logo.png/.svg",
+    		"appPackageName":"br.com.appname",
+    		"signKey": "key.keystore",
+    		"appTheme":{
+    			"primaryColor": "#456DF",
+    			"secondaryColor": "#456DF"
+    		}
+    	}
+    ]
+}

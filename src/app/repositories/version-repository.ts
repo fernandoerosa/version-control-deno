@@ -2,7 +2,8 @@ import { IAsset } from "../models/asset.ts";
 import Version from "../models/version.ts";
 import Asset from "../models/asset.ts";
 import { IVersion } from "../models/version.ts";
-import { FilesystemService } from "../services/filesystem.service.ts";
+import { CapacitorFilesystemService } from "../services/filesystem.service.ts";
+import { IFilesystemService } from "../services/interfaces/ifilesystem-service.ts";
 import { TriggerService } from "../services/trigger.service.ts";
 import { Request, Response } from "https://deno.land/x/oak@14.2.0/mod.ts";
 
@@ -41,6 +42,7 @@ const getVersion = async ({
   params: any,
   response: Response
 }) => {
+  console.log(typeof params)
   const appId: number = await params.appId;
   console.log(appId)
 
@@ -58,6 +60,8 @@ const addVersion = async ({
   response: Response
 }) => {
   try {
+    const filesystemService: IFilesystemService = new CapacitorFilesystemService();
+
     const formData: FormData = await request.body.formData();
     const versionData = JSON.parse(JSON.stringify(Object.fromEntries(formData)));
 
@@ -69,9 +73,10 @@ const addVersion = async ({
       await _updateCurrentVersion(currentVersion!._id.toString());
     }
 
-    version.appAssetId = await FilesystemService.createAssets(version, formData);
-
+    version.appAssetId = await filesystemService.createAssets(version, formData);
+ 
     await version.save();
+    
     console.log("New Version" + await Version.findById(version._id));
 
     response.status = 201;
