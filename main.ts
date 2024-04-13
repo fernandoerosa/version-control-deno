@@ -3,25 +3,11 @@ import mongoose from "npm:mongoose@^6.7";
 import router from "./routes.ts";
 
 const PORT = 3000;
-const ROOT_DIR = "./public";
-const ROOT_DIR_PATH = "/public";
 
 const app = new Application();
 
 app.use(router.routes());
 app.use(router.allowedMethods());
-
-//Test
-app.use(async (ctx, next) => {
-  if (!ctx.request.url.pathname.startsWith(ROOT_DIR_PATH)) {
-    next();
-    return;
-  }
-  const filePath = ctx.request.url.pathname.replace(ROOT_DIR_PATH, "");
-  await send(ctx, filePath, {
-    root: ROOT_DIR,
-  });
-});
 
 try {
   await mongoose.connect("mongodb://mongo-version-db/versions");
