@@ -1074,6 +1074,7 @@
     }
   },
   "redirects": {
+    "https://deno.land/std/path/mod.ts": "https://deno.land/std@0.222.1/path/mod.ts",
     "https://deno.land/x/dotenv/mod.ts": "https://deno.land/x/dotenv@v3.2.2/mod.ts",
     "https://deno.land/x/mongo/mod.ts": "https://deno.land/x/mongo@v0.33.0/mod.ts",
     "https://deno.land/x/oak/mod.ts": "https://deno.land/x/oak@14.2.0/mod.ts",

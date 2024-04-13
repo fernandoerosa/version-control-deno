@@ -7,6 +7,8 @@ import { IFilesystemService } from "../services/interfaces/ifilesystem-service.t
 import { TriggerService } from "../services/trigger.service.ts";
 import { Request, Response } from "https://deno.land/x/oak@14.2.0/mod.ts";
 
+const filesystemService: IFilesystemService = new CapacitorFilesystemService();
+
 const triggerReleaseVersion = async ({
   request,
   response
@@ -60,8 +62,6 @@ const addVersion = async ({
   response: Response
 }) => {
   try {
-    const filesystemService: IFilesystemService = new CapacitorFilesystemService();
-
     const formData: FormData = await request.body.formData();
     const versionData = JSON.parse(JSON.stringify(Object.fromEntries(formData)));
 
