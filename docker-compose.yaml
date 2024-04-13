@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mongo
+    container_name: db
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+  wforce-version-control:
+    build: .
+    ports:
+      - 8201:8201
+    volumes:
+      - .:/app
+    command: ["run", "--allow-net", "main.ts"]
