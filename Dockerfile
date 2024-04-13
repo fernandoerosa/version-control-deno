@@ -8,6 +8,6 @@ RUN deno cache deps.ts
 
 COPY . .
 
-EXPOSE 8201
+EXPOSE 3000
 
-CMD ["run", "--allow-net", "main.ts"]
+ENTRYPOINT [ "sh", "docker/entrypoint.sh" ]

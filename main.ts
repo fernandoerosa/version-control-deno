@@ -24,7 +24,7 @@ app.use(async (ctx, next) => {
 });
 
 try {
-  await mongoose.connect("mongodb://localhost:27017/users");
+  await mongoose.connect("mongodb://mongo-version-db/versions");
 } catch (e) {
   console.log(e.message)
 }

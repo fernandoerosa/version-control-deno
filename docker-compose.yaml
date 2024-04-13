@@ -1,16 +1,25 @@
 services:
-  db:
+  mongo-version-db:
     image: mongo
-    container_name: db
+    container_name: mongo-version-db
     restart: always
     volumes:
       - ./data/db:/data/db
     ports:
       - 27017:27017
+    networks:
+      - wforce-network
+
   wforce-version-control:
     build: .
     ports:
-      - 8201:8201
+      - 3000:3000
     volumes:
       - .:/app
-    command: ["run", "--allow-net", "main.ts"]
+    networks:
+      - wforce-network
+
+networks:
+  wforce-network:
+    driver: bridge
+  
