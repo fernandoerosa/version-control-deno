@@ -1,11 +1,9 @@
-import { IAsset } from "../models/asset.ts";
-import Version from "../models/version.ts";
-import Asset from "../models/asset.ts";
-import { IVersion } from "../models/version.ts";
+import Version, {IVersion} from "../models/version.ts";
+import Asset, { IAsset }  from "../models/asset.ts";
 import { CapacitorFilesystemService } from "../services/filesystem.service.ts";
 import { IFilesystemService } from "../services/interfaces/ifilesystem-service.ts";
 import { TriggerService } from "../services/trigger.service.ts";
-import { Request, Response } from "https://deno.land/x/oak@14.2.0/mod.ts";
+import { Request, Response } from "../../../deps.ts";
 
 const filesystemService: IFilesystemService = new CapacitorFilesystemService();
 
@@ -70,7 +68,7 @@ const addVersion = async ({
     const currentVersion: IVersion = await Version.findOne({ clientId: version.appId, isEnable: true }) as IVersion;
 
     if (currentVersion != null) {
-      await _updateCurrentVersion(currentVersion!._id.toString());
+      await _updateCurrentVersion(currentVersion._id.toString());
     }
 
     version.appAssetId = await filesystemService.createAssets(version, formData);
@@ -100,7 +98,7 @@ const _updateCurrentVersion = async (_id: string) => {
     await Version.findByIdAndUpdate(filter, update);
     console.log("VersionUpdated => " + await Version.findById(_id));
   } catch (e) {
-    throw e;
+    console.log(e);
   }
 }
 

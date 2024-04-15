@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@14.2.0/mod.ts";
+import { Router } from "./deps.ts";
 import { addVersion, getAllVersions, getVersion, triggerReleaseVersion } from "./src/app/repositories/version-repository.ts";
 
 const router = new Router();

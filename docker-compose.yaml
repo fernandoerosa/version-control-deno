@@ -1,12 +1,21 @@
 services:
-  mongo-version-db:
+  wforce-mongo-db:
     image: mongo
-    container_name: mongo-version-db
+    container_name: wforce-mongo-db
     restart: always
     volumes:
       - ./data/db:/data/db
     ports:
       - 27017:27017
+    networks:
+      - wforce-network
+
+  wforce-jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile-jenkins
+    ports:
+      - 3003:8080
     networks:
       - wforce-network
 

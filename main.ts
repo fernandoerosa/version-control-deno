@@ -1,4 +1,4 @@
-import { Application } from "https://deno.land/x/oak@14.2.0/mod.ts";
+import { Application } from "./deps.ts";
 import mongoose from "npm:mongoose@^6.7";
 import router from "./routes.ts";
 

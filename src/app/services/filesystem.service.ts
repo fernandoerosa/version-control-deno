@@ -1,7 +1,6 @@
-import { compress } from "https://deno.land/x/zip@v1.2.5/mod.ts";
 import Asset from "../models/asset.ts";
 import { IFilesystemService } from "./interfaces/ifilesystem-service.ts";
-import { stringify } from "https://deno.land/x/xml/mod.ts"
+import { compress, stringify } from "../../../deps.ts";
 
 export class CapacitorFilesystemService implements IFilesystemService {
 
@@ -17,7 +16,7 @@ export class CapacitorFilesystemService implements IFilesystemService {
 
       await Deno.mkdir(directory);
 
-      const iconFile: File = formData!.get("appIcon") as File;
+      const iconFile: File = formData.get("appIcon") as File;
       const iconArrayBuffer: ArrayBuffer = await iconFile.arrayBuffer();
       await Deno.writeFile(directory + "/" + iconFile.name, new Uint8Array(iconArrayBuffer));
 
