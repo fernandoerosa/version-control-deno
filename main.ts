@@ -10,7 +10,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 try {
-  await mongoose.connect("mongodb://mongo-version-db/versions");
+  await mongoose.connect("mongodb://wforce-mongo-db/versions");
 } catch (e) {
   console.log(e.message)
 }
